@@ -44,24 +44,60 @@ def init_db():
 def get_connection():
     return sqlite3.connect(DB_ROUTE)
 
-def registrar_evento(nombre, apellido):
+
+def ultima_accion_empleado(id):
     conn = get_connection()
-    c = conn.cursor()
-    # Buscar id del empleado
-    c.execute("SELECT id FROM empleados WHERE nombre = ? AND apellido = ?", (nombre, apellido))
-    emp = c.fetchone()
-    if emp:
-        emp_id = emp[0]
-        # Obtener último registro
-        c.execute("SELECT accion FROM registros WHERE empleado_id=? ORDER BY id DESC LIMIT 1", (emp_id,))
-        last = c.fetchone()
-        if last is None or last[0] == "Egreso":
-            accion = "Ingreso"
-        else:
-            accion = "Egreso"
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        c.execute("INSERT INTO registros (empleado_id, accion, timestamp) VALUES (?,?,?)",
-                  (emp_id, accion, timestamp))
-        conn.commit()
-        print(f"{accion} correcto: {nombre} {apellido} a las {timestamp}")
+    control = conn.cursor()
+
+    control.execute(
+        "SELECT accion FROM registros WHERE empleado_id=? ORDER BY id DESC LIMIT 1",
+        (id,)
+    )
+    last = control.fetchone()
+
     conn.close()
+    return last
+
+
+def ingreso_empleado(id):
+    if ultima_accion_empleado(id)[0] == "Ingreso":
+        return "Error"
+    else:
+        conn = get_connection()
+        control = conn.cursor()
+
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        accion = "Ingreso"
+
+        control.execute(
+            "INSERT INTO registros (empleado_id, accion, timestamp) VALUES (?,?,?)",
+            (id, accion, timestamp)
+        )
+        conn.commit()
+        print(f"{accion} correcto: {id} a las {timestamp}")
+
+        conn.close()
+
+
+def egreso_empleado(id):
+    if ultima_accion_empleado(id)[0] == "Egreso":
+        return "Error"
+    else:
+        conn = get_connection()
+        control = conn.cursor()
+
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        accion = "Egreso"
+
+        control.execute(
+            "INSERT INTO registros (empleado_id, accion, timestamp) VALUES (?,?,?)",
+            (id, accion, timestamp)
+        )
+        conn.commit()
+        print(f"{accion} correcto: {id} a las {timestamp}")
+
+        conn.close()
+
+
+def get_empleado(id):
+    return 1
