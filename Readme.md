@@ -19,17 +19,22 @@ Este proyecto es un sistema básico de control de asistencia para empleados, des
 
 ---
 
-## 📂 Estructura del proyecto
-TP-INICIAL/
-│
-├─ main.py # Archivo principal del proyecto
-├─ database.db # Base de datos SQLite generada automáticamente
-├─ templates/
-│ ├─ index.html # Plantilla principal con formulario y tabla de registros
-│ └─ style.css # Estilos CSS opcionales
-└─ static/
-
----
+## 📂 Estructura del proyecto   
+TPINICIAL/  
+├─ backend/  
+│└─ db.py   
+│└─ main.py  
+│└─ recognizer.py  
+├─ database/  
+│└─ database.bd  
+├─ frontend/   
+│ └─ static/  
+│ │ └─ style.css  
+│ └─ templates/   
+│ │└─ index.html  
+│ │└─ registros.html
+├─ haarcascade_frontalface_default.xml  
+├─ Readme.md
 
 ## ⚙️ Requisitos
 
