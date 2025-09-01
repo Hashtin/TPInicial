@@ -60,7 +60,9 @@ def ultima_accion_empleado(id):
 
 
 def ingreso_empleado(id):
-    if ultima_accion_empleado(id)[0] == "Ingreso":
+    ultima = ultima_accion_empleado(id)
+
+    if ultima is not None and ultima[0] == "Ingreso":
         return "Error"
     else:
         conn = get_connection()
@@ -80,7 +82,10 @@ def ingreso_empleado(id):
 
 
 def egreso_empleado(id):
-    if ultima_accion_empleado(id)[0] == "Egreso":
+
+    ultima = ultima_accion_empleado(id)
+
+    if ultima is not None and ultima[0] == "Egreso":
         return "Error"
     else:
         conn = get_connection()
@@ -100,4 +105,4 @@ def egreso_empleado(id):
 
 
 def get_empleado(id):
-    return 1
+    
