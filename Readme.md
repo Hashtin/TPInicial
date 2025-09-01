@@ -32,7 +32,7 @@ TPINICIAL/
 │ │ └─ style.css  
 │ └─ templates/   
 │ │└─ index.html  
-│ │└─ registros.html
+│ │└─ registros.html  
 ├─ haarcascade_frontalface_default.xml  
 ├─ Readme.md
 

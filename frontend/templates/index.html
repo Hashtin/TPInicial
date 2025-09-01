@@ -7,10 +7,8 @@
 <body>
     <h2>Bienvenido a nuestra PYME</h2>
 
-    <!-- Formulario de ingreso -->
-    <form action="/ingreso" method="post">
-        <input type="text" name="nombre" placeholder="Nombre" required>
-        <input type="text" name="apellido" placeholder="Apellido" required>
+    <!-- Formulario de ingreso: abre la cámara al hacer clic -->
+    <form action="{{ url_for('ingreso_camera') }}" method="get">
         <button type="submit">Iniciar Ingreso</button>
     </form>
 

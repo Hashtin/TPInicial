@@ -1,3 +1,4 @@
+from datetime import datetime
 import sqlite3
 
 DB_ROUTE = "database/database.db"
@@ -48,7 +49,7 @@ def registrar_evento(nombre, apellido):
     conn = get_connection()
     c = conn.cursor()
     # Buscar id del empleado
-    c.execute("SELECT id FROM empleados WHERE nombre=? AND apellido=?", (nombre, apellido))
+    c.execute("SELECT id FROM empleados WHERE nombre = ? AND apellido = ?", (nombre, apellido))
     emp = c.fetchone()
     if emp:
         emp_id = emp[0]
