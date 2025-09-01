@@ -1,0 +1,105 @@
+/* ===== BODY ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* organiza en columna */
+    justify-content: center;
+    align-items: center;
+    animation: gradientShift 15s ease infinite;
+}
+
+/* ===== ANIMACIÓN GRADIENTE ===== */
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+body {
+    background-size: 200% 200%;
+}
+
+/* ===== TITULO PRINCIPAL ===== */
+h2 {
+    font-size: 28px;
+    color: #fff;
+    margin-bottom: 40px;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+/* ===== FORMULARIO ===== */
+form {
+    background-color: rgba(0,0,0,0.85);
+    padding: 40px 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px; /* espacio debajo del formulario */
+}
+
+/* ===== INPUTS ===== */
+input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border: 1px solid #555;
+    background-color: #222;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+input:focus {
+    border-color: #00c6ff;
+    box-shadow: 0 0 8px rgba(0,198,255,0.5);
+    outline: none;
+}
+
+/* ===== BOTONES ===== */
+button {
+    width: 100%;
+    padding: 14px 0;
+    background: linear-gradient(90deg, #007bff, #00c6ff);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+button:hover {
+    background: linear-gradient(90deg, #0056b3, #0099cc);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+/* ===== BOTON SECUNDARIO REGISTROS ===== */
+button.secondary {
+    width: 200px;
+    padding: 12px 0;
+    margin-bottom: 20px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 400px) {
+    form {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    button.secondary {
+        width: 100%;
+    }
+}

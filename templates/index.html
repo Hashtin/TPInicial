@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ingreso Empleados</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Bienvenido a nuestra PYME</h2>
+
+    <!-- Formulario de ingreso -->
+    <form action="/ingreso" method="post">
+        <input type="text" name="nombre" placeholder="Nombre" required>
+        <input type="text" name="apellido" placeholder="Apellido" required>
+        <button type="submit">Iniciar Ingreso</button>
+    </form>
+
+    <!-- Botón de registros -->
+    <form action="{{ url_for('registros') }}" method="get">
+        <button type="submit">Registros</button>
+    </form>
+</body>
+</html>
