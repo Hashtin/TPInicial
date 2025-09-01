@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Egreso de Empleados</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h2>Detección Facial - Egreso</h2>
+    <p>Se mostrará tu rostro durante 5 segundos</p>
+
+    <!-- Stream de video -->
+    <img src="{{ url_for('video_feed') }}" width="640" height="480">
+
+    <!-- Botón para confirmar y volver al index -->
+    <form method="post">
+        <button type="submit">Confirmar</button>
+    </form>
+</body>
+</html>

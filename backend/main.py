@@ -21,13 +21,21 @@ def index():
     conn.close()
     return render_template('index.html', registros=data)
 
-# Página temporal que abre la cámara
+# Página temporal que abre la cámara para ingresos
 @app.route('/ingreso_camera', methods=['GET', 'POST'])
 def ingreso_camera():
     if request.method == 'POST':
         # Aquí se podría integrar recognizer después
         return redirect(url_for('index'))
     return render_template('ingreso_camera.html')
+
+# Página temporal que abre la cámara para egresos
+@app.route('/egreso_camera', methods=['GET', 'POST'])
+def egreso_camera():
+    if request.method == 'POST':
+        # Aquí se podría integrar recognizer después
+        return redirect(url_for('index'))
+    return render_template('egreso_camera.html')
 
 # Stream de video en vivo
 def generar_frames():
