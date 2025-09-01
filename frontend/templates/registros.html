@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registros</title>
+</head>
+<body>
+    <h2>Lista de registros</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Empleado</th>
+            <th>Acción</th>
+            <th>Fecha</th>
+        </tr>
+        {% for r in registros %}
+        <tr>
+            <td>{{ r[0] }}</td>
+            <td>{{ r[1] }}</td>
+            <td>{{ r[2] }}</td>
+            <td>{{ r[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
+    <br><br>
+    <a href="{{ url_for('index') }}">
+        <button>ATRÁS</button>
+    </a>
+
+</body>
+</html>

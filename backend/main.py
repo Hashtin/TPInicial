@@ -77,9 +77,22 @@ def video_feed():
     return Response(generar_frames(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@app.route('/registros')
+def obtener_registros():
+    # Conectar a la base de datos db
+    conn = db.get_connection()
+    c = conn.cursor()
+    
+    # Traer todos los registros de la tabla registros
+    c.execute("SELECT id, empleado_id, accion, date FROM registros")
+    registros = c.fetchall()
+    conn.close()
+    
+    return registros 
+
+@app.route("/registros")
 def registros():
-    return render_template('registros.html')
+    datos = obtener_registros()
+    return render_template("registros.html", registros=datos)
 
 
 # ====================== RUN ======================

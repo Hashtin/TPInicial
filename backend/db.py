@@ -102,7 +102,3 @@ def egreso_empleado(id):
         print(f"{accion} correcto: {id} a las {timestamp}")
 
         conn.close()
-
-
-def get_empleado(id):
-    
