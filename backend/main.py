@@ -2,19 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for, Response
 from datetime import datetime
 import db
 import cv2
+import recognizer
 
 app = Flask(__name__,
     template_folder="../frontend/templates",
     static_folder="../frontend/static")
-
-db.init_db()
 
 # ====================== RUTAS ======================
 @app.route('/')
 def index():
     conn = db.get_connection()
     c = conn.cursor()
-    c.execute('''SELECT empleados.nombre, empleados.apellido, registros.accion, registros.timestamp
+    c.execute('''SELECT empleados.nombre, empleados.apellido, registros.accion, registros.date
                  FROM registros
                  JOIN empleados ON registros.empleado_id = empleados.id
                  ORDER BY registros.id DESC''')

@@ -6,14 +6,13 @@ DB_ROUTE = "database/database.db"
 def init_db():
     conn = get_connection()
     c = conn.cursor()
-    
+
     # Creamos la tabla empleados, donde asignamos nombres y apellidos y un id para diferenciar.
     c.execute('''CREATE TABLE IF NOT EXISTS empleados
                  (id INTEGER PRIMARY KEY, nombre TEXT, apellido TEXT)''')
     
     # Creamos tabla registros, donde guardaremos ingresos e egresos con timestamp.
-    c.execute('''CREATE TABLE IF NOT EXISTS registros
-                 (id INTEGER PRIMARY KEY, empleado_id INTEGER, accion TEXT, timestamp TEXT)''')
+    c.execute("CREATE TABLE IF NOT EXISTS registros (id INTEGER PRIMARY KEY,empleado_id INTEGER,accion TEXT,date TIMESTAMP, FOREIGN KEY (empleado_id) REFERENCES empleados(id));")
     
     # Empleados = equipo de trabajo de prueba
     empleados = [
@@ -29,15 +28,15 @@ def init_db():
     
     # Registrar ingreso actual para cada uno
     from datetime import datetime
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = datetime.now()
 
     for emp in empleados:
         emp_id = emp[0]
     # Comprobar si ya tiene un registro (para no duplicar al reiniciar)
         c.execute("SELECT * FROM registros WHERE empleado_id=? AND accion='Ingreso'", (emp_id,))
         if not c.fetchone():
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            c.execute("INSERT INTO registros (empleado_id, accion, timestamp) VALUES (?,?,?)",
+            timestamp = datetime.now()
+            c.execute("INSERT INTO registros (empleado_id, accion, date) VALUES (?,?,?)",
                   (emp_id, "Ingreso", timestamp))
     conn.commit()
     conn.close()

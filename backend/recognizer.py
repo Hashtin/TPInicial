@@ -1,47 +1,41 @@
-import time
 import cv2
-import db
+import os
+import imutils 
 
-def detectar_usuario():
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        print("⚠️ No se pudo abrir la cámara.")
-        return
+def capturar_rostro():
+    id_empleado = 0
+    ruta_data = "../dataset"
+    ruta_empleado = ruta_data + "/" + str(id_empleado)
+    ruta_video = ruta_data + "/videos/" + str(id_empleado) + ".mp4"
 
-    face_cascade = cv2.CascadeClassifier(
-        cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-    )
+    if not os.path.exists(ruta_empleado):
+        print('Carpeta creada: ', ruta_empleado)
+        os.makedirs(ruta_empleado)
+    
+    cap = cv2.VideoCapture(ruta_video)
 
-    tiempo_inicio = cv2.getTickCount()
-    tiempo_limite = 5  # segundos
+    faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades+ 'haarcascade_frontalface_default.xml')
+    count = 0
 
-    while True:
+    while True: 
         ret, frame = cap.read()
-        if not ret:
-            break
-
+        if ret == False: break
+        frame = imutils.resize(frame, width=640)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        auxFrame = frame.copy()
 
-        # Dibujar rectángulos sobre los rostros detectados
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        faces = faceClassif.detectMultiScale(gray,1.3,5)
 
-        # Mensaje sobre la imagen
-        cv2.putText(frame, "Detectando rostro...", (10,30),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0,255,0), 2)
+        for(x,y,w,h) in faces:
+            cv2.rectangle(frame, (x,y), (x + w, +h),(0,255,0),2)
+            rostro = auxFrame[y:y+h,x:x+w]
+            rostro = cv2.resize(rostro,(150,150),interpolation=cv2.INTER_CUBIC)
+            cv2.imwrite(ruta_empleado + '/rostro_{}.jpg'.format(count),rostro)
+            count = count + 1
+        cv2.imshow('frame',frame)
 
-        cv2.imshow("Cámara", frame)
-
-        # Salir si se presiona 'q'
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        k = cv2.waitKey(1)
+        if k == 27 or count >= 300:
             break
-
-        # Salir si pasa el tiempo límite
-        tiempo_actual = (cv2.getTickCount() - tiempo_inicio) / cv2.getTickFrequency()
-        if tiempo_actual > tiempo_limite:
-            break
-
     cap.release()
     cv2.destroyAllWindows()
-
