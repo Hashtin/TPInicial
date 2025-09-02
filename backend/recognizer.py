@@ -97,6 +97,10 @@ def init_face_recognizer():
 # Stream de video en vivo
 def generar_frames(accion):
     global face_recognizer
+
+    if(not(is_active)):
+        init_face_recognizer()
+
     face_cascade = cv2.CascadeClassifier(
         cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
     )
@@ -109,7 +113,8 @@ def generar_frames(accion):
     tiempo_limite = 60  # segundos
 
     detected = False
-    texto = "Identificando..."
+    textoEmpleado = "Identificando..."
+    textoAccion = ""
     color = (245, 73, 39)
     
     try:
@@ -128,7 +133,8 @@ def generar_frames(accion):
                 rostro = cv2.resize(rostro,(150,150),interpolation=cv2.INTER_CUBIC)
                 result = face_recognizer.predict(rostro) ##predice etiqueta
 
-                cv2.putText(frame, texto,(x,y - 10),1,1.3,color,2,cv2.LINE_AA) ## visualiza prediccion
+                cv2.putText(frame, textoEmpleado,(x,y - 20),1,1.3,color,2,cv2.LINE_AA) ## visualiza prediccion
+                cv2.putText(frame, textoAccion,(x,y + 250),1,1.3,color,2,cv2.LINE_AA) ## visualiza prediccion
                 
                 if(not(detected) and result[1] < 6000):
                     detected = True
@@ -137,11 +143,13 @@ def generar_frames(accion):
 
                     if((accion == 'Egreso' and db.egreso_empleado(id_empleado)) or
                         (accion == 'Ingreso' and db.ingreso_empleado(id_empleado))):
-                        texto = f"{empleado[0]} {empleado[1]}, {accion} registrado"
+                        textoEmpleado = f"{empleado[0]} {empleado[1]}"
+                        textoAccion = f"{accion} registrado"
                         color = (11,103,48)
                     else:
-                        texto = f"{empleado[0]} {empleado[1]}, {accion} fallido"
-                        color = (255,0,0)
+                        textoEmpleado = f"{empleado[0]} {empleado[1]}"
+                        textoAccion = f"{accion} fallido"
+                        color = (100,50,100)
                     
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_bytes = buffer.tobytes()
