@@ -11,15 +11,7 @@ app = Flask(__name__,
 # ====================== RUTAS ======================
 @app.route('/')
 def index():
-    conn = db.get_connection()
-    c = conn.cursor()
-    c.execute('''SELECT empleados.nombre, empleados.apellido, registros.accion, registros.date
-                 FROM registros
-                 JOIN empleados ON registros.empleado_id = empleados.id
-                 ORDER BY registros.id DESC''')
-    data = c.fetchall()
-    conn.close()
-    return render_template('index.html', registros=data)
+    return render_template('index.html')
 
 # Página temporal que abre la cámara para ingresos
 @app.route('/ingreso_camera', methods=['GET', 'POST'])

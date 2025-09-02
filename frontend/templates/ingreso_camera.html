@@ -2,11 +2,11 @@
 <html>
 <head>
     <title>Ingreso Empleados</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='ingreso_camera.css') }}">
 </head>
 <body>
     <h2>Detección Facial - Ingreso</h2>
-    <p>Se mostrará tu rostro durante 5 segundos</p>
+    <p>Reconocimiento facial en proceso...</p>
 
     <!-- Stream de video -->
     <img src="{{ url_for('video_feed') }}" width="640" height="480">
