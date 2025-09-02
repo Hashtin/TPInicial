@@ -103,6 +103,7 @@ def egreso_empleado(id):
     return True
 
 def get_empleado(id):
+
     conn = get_connection()
     control = conn.cursor()
 
@@ -111,3 +112,15 @@ def get_empleado(id):
     empleado = control.fetchone()
     conn.close()
     return empleado
+
+def obtener_registros():
+    # Conectar a la base de datos db
+    conn = get_connection()
+    c = conn.cursor()
+    
+    # Traer todos los registros de la tabla registros
+    c.execute("SELECT id, empleado_id, accion, date FROM registros ORDER BY date DESC")
+    registros = c.fetchall()
+    conn.close()
+    
+    return registros 
