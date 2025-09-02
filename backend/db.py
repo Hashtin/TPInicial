@@ -63,42 +63,51 @@ def ingreso_empleado(id):
     ultima = ultima_accion_empleado(id)
 
     if ultima is not None and ultima[0] == "Ingreso":
-        return "Error"
+        return False
     else:
         conn = get_connection()
         control = conn.cursor()
 
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        timestamp = datetime.now()
         accion = "Ingreso"
 
         control.execute(
-            "INSERT INTO registros (empleado_id, accion, timestamp) VALUES (?,?,?)",
+            "INSERT INTO registros (empleado_id, accion, date) VALUES (?,?,?)",
             (id, accion, timestamp)
         )
         conn.commit()
-        print(f"{accion} correcto: {id} a las {timestamp}")
 
         conn.close()
-
+        return True
 
 def egreso_empleado(id):
 
     ultima = ultima_accion_empleado(id)
 
     if ultima is not None and ultima[0] == "Egreso":
-        return "Error"
-    else:
-        conn = get_connection()
-        control = conn.cursor()
+        return False
+    
+    conn = get_connection()
+    control = conn.cursor()
 
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        accion = "Egreso"
+    timestamp = datetime.now()
+    accion = "Egreso"
 
-        control.execute(
-            "INSERT INTO registros (empleado_id, accion, timestamp) VALUES (?,?,?)",
-            (id, accion, timestamp)
-        )
-        conn.commit()
-        print(f"{accion} correcto: {id} a las {timestamp}")
+    control.execute(
+        "INSERT INTO registros (empleado_id, accion, date) VALUES (?,?,?)",
+        (id, accion, timestamp)
+    )
+    conn.commit()
 
-        conn.close()
+    conn.close()
+    return True
+
+def get_empleado(id):
+    conn = get_connection()
+    control = conn.cursor()
+
+    control.execute("Select nombre, apellido from empleados where id=?",(id,))
+
+    empleado = control.fetchone()
+    conn.close()
+    return empleado

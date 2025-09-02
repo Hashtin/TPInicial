@@ -7,7 +7,7 @@ RUTA_DATA = "../dataset"
 
 def capturar_rostro(id_empleado):
     ruta_empleado = RUTA_DATA + "/" + str(id_empleado)
-    ruta_video = RUTA_DATA + "/videos/" + str(id_empleado) + ".mp4"
+    ruta_video = "/videos/" + str(id_empleado) + ".mp4"
 
     if not os.path.exists(ruta_empleado):
         print('Carpeta creada: ', ruta_empleado)

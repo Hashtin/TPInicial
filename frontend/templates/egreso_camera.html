@@ -6,10 +6,10 @@
 </head>
 <body>
     <h2>Detección Facial - Egreso</h2>
-    <p>Se mostrará tu rostro durante 5 segundos</p>
+    <p>Reconocimiento facial en proceso...</p>
 
     <!-- Stream de video -->
-    <img src="{{ url_for('video_feed') }}" width="640" height="480">
+    <img src="{{ url_for('video_feed', accion='Egreso') }}" width="640" height="480">
 
     <!-- Botón para confirmar y volver al index -->
     <form method="post">
