@@ -18,7 +18,7 @@ def index():
 @app.route('/ingreso_camera', methods=['GET', 'POST'])
 def ingreso_camera():
     if request.method == 'POST':
-        # Aquí se podría integrar recognizer después
+        recognizer.reset()
         return redirect(url_for('index'))
     return render_template('ingreso_camera.html')
 
@@ -26,7 +26,6 @@ def ingreso_camera():
 @app.route('/egreso_camera', methods=['GET', 'POST'])
 def egreso_camera():
     if request.method == 'POST':
-        # Aquí se podría integrar recognizer después
         return redirect(url_for('index'))
     return render_template('egreso_camera.html')
 
@@ -40,6 +39,28 @@ def video_feed():
 def registros():
     datos = db.obtener_registros_empleados()
     return render_template("registros.html", registros=datos)
+
+@app.route('/confirmar', methods=['POST'])
+def confirmar():
+    accion = request.args.get("accion")  
+    print("Acción recibida:", accion)
+    detected = recognizer.detected
+
+    if detected:
+        if accion == "Ingreso" and db.ingreso_empleado(recognizer.id_empleado):
+            print("Ingreso Exitoso:" + str(recognizer.id_empleado))
+        elif accion == "Egreso" and db.egreso_empleado(recognizer.id_empleado):
+            print("Egreso Exitoso:" + str(recognizer.id_empleado))
+        else:
+            recognizer.reset()
+            print("Ingreso Fallido")
+            
+    return redirect(url_for('index'))
+
+@app.route('/volver', methods=['POST'])
+def volver():
+    recognizer.reset()
+    return redirect(url_for('index'))  # redirige de vuelta a inicio, por ejemplo
 
 # ====================== RUN ======================
 if __name__ == "__main__":

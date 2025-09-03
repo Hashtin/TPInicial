@@ -8,6 +8,8 @@ RUTA_DATA = "../dataset"
 
 face_recognizer = None
 is_active = False
+detected = False
+id_empleado = None
 
 #Machine learning
 def capturar_rostro(id_empleado, nro_ultima_foto, nro_deseado):
@@ -93,10 +95,17 @@ def init_face_recognizer():
     face_recognizer.read('modeloEigenFaces.xml')
     is_active = True
 
+def reset():
+    global detected
+    global id_empleado
+    detected = False
+    id_empleado = False
 
 # Stream de video en vivo
 def generar_frames(accion):
     global face_recognizer
+    global detected
+    global id_empleado
 
     if(not(is_active)):
         init_face_recognizer()
@@ -113,8 +122,8 @@ def generar_frames(accion):
     tiempo_limite = 60  # segundos
 
     detected = False
-    textoEmpleado = "Identificando..."
-    textoAccion = ""
+    texto_empleado = "Identificando..."
+    texto_estado = ""
     color = (245, 73, 39)
     
     try:
@@ -133,23 +142,16 @@ def generar_frames(accion):
                 rostro = cv2.resize(rostro,(150,150),interpolation=cv2.INTER_CUBIC)
                 result = face_recognizer.predict(rostro) ##predice etiqueta
 
-                cv2.putText(frame, textoEmpleado,(x,y - 20),1,1.3,color,2,cv2.LINE_AA) ## visualiza prediccion
-                cv2.putText(frame, textoAccion,(x,y + 250),1,1.3,color,2,cv2.LINE_AA) ## visualiza prediccion
+                cv2.putText(frame, texto_empleado,(x,y - 20),1,1.3,color,2,cv2.LINE_AA) ## visualiza prediccion
+                cv2.putText(frame, texto_estado,(x + 50,y + 250),1,1.3,color,2,cv2.LINE_AA) ## visualiza prediccion
                 
                 if(not(detected) and result[1] < 6000):
                     detected = True
                     id_empleado = int(result[0])
-                    empleado = db.get_empleado(id_empleado)
-
-                    if((accion == 'Egreso' and db.egreso_empleado(id_empleado)) or
-                        (accion == 'Ingreso' and db.ingreso_empleado(id_empleado))):
-                        textoEmpleado = f"{empleado[0]} {empleado[1]}"
-                        textoAccion = f"{accion} registrado"
-                        color = (11,103,48)
-                    else:
-                        textoEmpleado = f"{empleado[0]} {empleado[1]}"
-                        textoAccion = f"{accion} fallido"
-                        color = (100,50,100)
+                    empleado  = db.get_empleado(id_empleado)
+                    texto_empleado = f"{empleado[0]} {empleado[1]}"
+                    texto_estado = "DETECTADO"
+                    color = (0,255,0)
                     
             ret, buffer = cv2.imencode('.jpg', frame)
             frame_bytes = buffer.tobytes()
