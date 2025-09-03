@@ -10,6 +10,7 @@ app = Flask(__name__,
 @app.route('/')
 def index():
     if(not(recognizer.is_active)):
+        print("Recognizer inicializado")
         recognizer.init_face_recognizer()
     return render_template('index.html')
 
@@ -37,7 +38,7 @@ def video_feed():
 
 @app.route("/registros")
 def registros():
-    datos = db.obtener_registros()
+    datos = db.obtener_registros_empleados()
     return render_template("registros.html", registros=datos)
 
 # ====================== RUN ======================

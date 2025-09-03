@@ -10,9 +10,9 @@ face_recognizer = None
 is_active = False
 
 #Machine learning
-def capturar_rostro(id_empleado):
+def capturar_rostro(id_empleado, nro_ultima_foto, nro_deseado):
     ruta_empleado = RUTA_DATA + "/" + str(id_empleado)
-    ruta_video = "/videos/" + str(id_empleado) + ".mp4"
+    ruta_video = "../videos/" + str(id_empleado) + ".mp4"
 
     if not os.path.exists(ruta_empleado):
         print('Carpeta creada: ', ruta_empleado)
@@ -25,7 +25,7 @@ def capturar_rostro(id_empleado):
     cap = cv2.VideoCapture(ruta_video)
 
     faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades+ 'haarcascade_frontalface_default.xml')
-    count = 0
+    count = nro_ultima_foto + 1
 
     while True: 
         ret, frame = cap.read()
@@ -45,7 +45,7 @@ def capturar_rostro(id_empleado):
         cv2.imshow('frame',frame)
 
         k = cv2.waitKey(1)
-        if k == 27 or count >= 300:
+        if k == 27 or count >= nro_deseado:
             break
     cap.release()
     cv2.destroyAllWindows()

@@ -44,7 +44,6 @@ def init_db():
 def get_connection():
     return sqlite3.connect(DB_ROUTE)
 
-
 def ultima_accion_empleado(id):
     conn = get_connection()
     control = conn.cursor()
@@ -57,7 +56,6 @@ def ultima_accion_empleado(id):
 
     conn.close()
     return last
-
 
 def ingreso_empleado(id):
     ultima = ultima_accion_empleado(id)
@@ -120,6 +118,18 @@ def obtener_registros():
     
     # Traer todos los registros de la tabla registros
     c.execute("SELECT id, empleado_id, accion, date FROM registros ORDER BY date DESC")
+    registros = c.fetchall()
+    conn.close()
+    
+    return registros 
+
+def obtener_registros_empleados():
+    # Conectar a la base de datos db
+    conn = get_connection()
+    c = conn.cursor()
+    
+    # Traer todos los registros de la tabla registros
+    c.execute("SELECT r.id, e.nombre, e.apellido, r.accion, r.date FROM registros r, empleados e where r.empleado_id = e.id ORDER BY date DESC")
     registros = c.fetchall()
     conn.close()
     
