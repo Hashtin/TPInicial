@@ -35,7 +35,7 @@ img {
     margin-bottom: 30px;
 }
 
-/* ===== BOTÓN CONFIRMAR ===== */
+/* ===== BOTÓNES ===== */
 button {
     font-family: 'Courier New', Courier, monospace;
     font-size: 18px;
@@ -53,6 +53,18 @@ button:hover {
     background-color: #d9f2d9;
     transform: translateY(-2px);
     box-shadow: 6px 6px 0 #a3cfa3;
+}
+/* ===== CONTENEDOR DE BOTONES ===== */
+.button-group {
+    display: flex;
+    gap: 50px;           /* espacio entre botones */
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Los formularios no deben ocupar ancho completo */
+.button-group form {
+    margin: 0;
 }
 
 /* ===== RESPONSIVE ===== */

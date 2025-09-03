@@ -11,7 +11,7 @@ body {
 
 /* ===== TITULO ===== */
 h2 {
-    font-size: 32px;
+    font-size: 50px;
     margin-bottom: 30px;
     text-align: center;
     text-shadow: 2px 2px 0 #cce5cc, 4px 4px 0 #b3d9b3;
@@ -48,7 +48,6 @@ a button {
     font-family: 'Courier New', Courier, monospace;
     font-size: 18px;
     padding: 12px 25px;
-    margin-top: 20px;
     border: 2px solid #3b6b3b;
     border-radius: 8px;
     background-color: #ffffff;
@@ -56,6 +55,12 @@ a button {
     cursor: pointer;
     box-shadow: 4px 4px 0 #b3d9b3;
     transition: all 0.3s ease;
+
+    position: fixed;   /* lo mantiene siempre arriba a la izquierda */
+    top: 20px;
+    left: 20px;
+    margin: 0;         /* quitamos margin-top para que no empuje nada */
+    z-index: 1000;     /* siempre por encima de tablas/textos */
 }
 
 a button:hover {
@@ -66,9 +71,6 @@ a button:hover {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 800px) {
-    table {
-        width: 95%;
-    }
     th, td {
         font-size: 14px;
         padding: 10px 8px;
@@ -77,8 +79,10 @@ a button:hover {
         font-size: 26px;
     }
     a button {
-        width: 90%;
         font-size: 16px;
-        padding: 10px 15px;
+        padding: 10px 18px;
+        top: 10px;   /* menos separación en pantallas chicas */
+        left: 10px;
     }
 }
+

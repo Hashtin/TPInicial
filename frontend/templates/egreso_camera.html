@@ -11,15 +11,18 @@
     <!-- Stream de video -->
     <img src="{{ url_for('video_feed', accion='Egreso') }}" width="640" height="480">
 
+    <!-- Contenedor de botones -->
+<div class="button-group">
     <!-- Botón para volver al index -->
     <form method="post" action="{{ url_for('volver') }}">
         <button type="submit">Volver</button>
     </form>
 
     <!-- Botón para confirmar -->
-    <form method="post" action="{{ url_for('confirmar') }}?accion=Egreso">
+    <form method="post" action="{{ url_for('confirmar') }}?accion=Ingreso">
         <button type="submit">Confirmar</button>
     </form>
+</div>
     
 </body>
 </html>

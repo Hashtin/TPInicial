@@ -11,6 +11,21 @@ body {
     padding: 20px;
 }
 
+/* ===== LOGO - HEADER VINTAGE ===== */
+.logo-header {
+    position: absolute;       /* lo coloca en la esquina superior izquierda */
+    top: 20px;
+    left: 20px;
+    max-width: 100px;         /* tamaño máximo */
+    height: auto;
+    border: 4px solid #3b6b3b; /* borde verde oscuro */
+    border-radius: 12px;       /* esquinas redondeadas */
+    padding: 5px;
+    box-shadow: 4px 4px 0 #cce5cc, inset 0 0 10px rgba(76, 175, 80, 0.2); /* efecto vintage */
+    background-color: #ffffff; /* fondo dentro del borde */
+    z-index: 1000;
+}
+
 /* ===== TITULO PRINCIPAL ===== */
 h2 {
     font-size: 60px; /* más grande */
@@ -57,6 +72,11 @@ button:hover {
     button {
         font-size: 16px;
         padding: 12px 20px;
+    }
+     .logo-header {
+        max-width: 100px;
+        top: 10px;
+        left: 10px;
     }
 }
 
