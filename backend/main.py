@@ -9,6 +9,7 @@ app = Flask(__name__,
 # ====================== RUTAS ======================
 @app.route('/')
 def index():
+    recognizer.reset()
     if(not(recognizer.is_active)):
         print("Recognizer inicializado")
         recognizer.init_face_recognizer()
