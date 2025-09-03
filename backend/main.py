@@ -43,19 +43,28 @@ def registros():
 @app.route('/confirmar', methods=['POST'])
 def confirmar():
     accion = request.args.get("accion")  
-    print("Acción recibida:", accion)
     detected = recognizer.detected
-
+    mensaje = "ERROR: No se logró reconocer el empleado"
     if detected:
         if accion == "Ingreso" and db.ingreso_empleado(recognizer.id_empleado):
-            print("Ingreso Exitoso:" + str(recognizer.id_empleado))
-        elif accion == "Egreso" and db.egreso_empleado(recognizer.id_empleado):
-            print("Egreso Exitoso:" + str(recognizer.id_empleado))
-        else:
+            empleado = db.get_empleado(recognizer.id_empleado)
+            mensaje = f"INGRESO REGISTRADO: {empleado[0]} {empleado[1]}" 
             recognizer.reset()
-            print("Ingreso Fallido")
+            return render_template("resultado.html", mensaje=mensaje)
+        
+        elif accion == "Egreso" and db.egreso_empleado(recognizer.id_empleado):
+            empleado = db.get_empleado(recognizer.id_empleado)
+            mensaje = f"EGRESO REGISTRADO: {empleado[0]} {empleado[1]}" 
+            recognizer.reset()
+            return render_template("resultado.html", mensaje=mensaje)
+        
+        else:
+            empleado = db.get_empleado(recognizer.id_empleado)
+            mensaje = f"ERROR: {empleado[0]} {empleado[1]}, ya realizó la accion = {accion}"
+            recognizer.reset() 
+            return render_template("resultado.html", mensaje=mensaje)
             
-    return redirect(url_for('index'))
+    return render_template("resultado.html", mensaje=mensaje)
 
 @app.route('/volver', methods=['POST'])
 def volver():
