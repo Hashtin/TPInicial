@@ -41,7 +41,7 @@ TPINICIAL/
 - Python 3.8 o superior
 - Librerías de Python:
   - Flask
-  - OpenCV (`opencv-python`)
+  - OpenCV (`opencv-contrib-python`)
   - SQLite3 (incluido en Python)
 - Extensión recomendada para VSCode:
   - SQLite (para visualizar la base de datos)
@@ -49,4 +49,4 @@ TPINICIAL/
 Instalación de librerías:
 
 ```bash
-pip install flask opencv-python
+pip install flask opencv-contrib-python imutils
