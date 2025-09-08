@@ -18,7 +18,24 @@ def actualizar_empleados(empleados):
     return
 
 def obtener_todos_empleados():
-    return 
+    conn = get_connection()
+    c = conn.cursor()
+    
+    c.execute("SELECT id_empleado, embedding FROM empleados_embeddings ")
+    filas = c.fetchall()
+
+    empleados = []
+    for fila in filas:
+        id_empleado, embedding_blob = fila
+        embedding = np.frombuffer(embedding_blob, dtype=np.float32)  # reconstruye array
+        empleados.append({
+            "id": id_empleado,
+            "embedding": embedding
+        })
+
+    conn.close()
+    
+    return empleados 
 
 def registrar_embedding_local(id_empleado, embedding: np.ndarray):
     """

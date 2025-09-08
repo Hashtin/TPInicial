@@ -16,6 +16,8 @@ class InterfazReconocimiento(QMainWindow):
         self.reconocimiento_activo = False
         self.recognizer = recognizer  # Instancia de ReconocedorFacial
 
+        self.empleado_actual = None         # Empleado actualmente reconocido
+
         # Inicializar UI
         self.inicializar_ui()
 
@@ -77,18 +79,25 @@ class InterfazReconocimiento(QMainWindow):
 
     # ---------- Métodos para iniciar/detener reconocimiento ----------
     def iniciar_reconocimiento(self):
-        if self.captura is None:
+        if self.captura is None or not self.captura.isOpened():
             self.inicializar_camara()
-        self.reconocimiento_activo = True
+
         self.boton_iniciar.setEnabled(False)
         self.boton_detener.setEnabled(True)
-        self.actualizar_estado("Reconocimiento facial activo")
+
 
     def detener_reconocimiento(self):
-        self.reconocimiento_activo = False
+        if self.captura:
+            self.temporizador.stop()
+            self.captura.release()
+            self.captura = None
+            self.etiqueta_camara.setText("Cámara detenida")
+            self.etiqueta_camara.setPixmap(QPixmap())  # limpiar imagen
+            self.actualizar_estado("Cámara apagada")
+
         self.boton_iniciar.setEnabled(True)
         self.boton_detener.setEnabled(False)
-        self.actualizar_estado("Reconocimiento detenido")
+
 
     def inicializar_camara(self):
         self.captura = cv2.VideoCapture(0)
@@ -102,14 +111,46 @@ class InterfazReconocimiento(QMainWindow):
     def actualizar_frame(self):
         if self.captura and self.captura.isOpened():
             ret, frame = self.captura.read()
-            if ret:
-                # Convertir frame de BGR a RGB para Qt
-                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                h, w, ch = frame_rgb.shape
-                bytes_per_line = ch * w
-                imagen_qt = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
-                self.etiqueta_camara.setPixmap(QPixmap.fromImage(imagen_qt).scaled(
-                    640, 480, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+            if not ret:
+                return
+
+            # --- Detección rápida de rostro con Haar Cascade ---
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            face_cascade = cv2.CascadeClassifier(
+                cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
+            )
+            faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+
+            if len(faces) == 0 and self.empleado_actual != None:
+                # No hay rostro en pantalla
+                self.empleado_actual = None
+                
+            elif self.empleado_actual == None and len(faces) > 0:
+                if getattr(self, "empleado_actual", None) is None:
+                    embedding, _ = self.recognizer.extraer_embedding(frame)
+                    if embedding is not None:
+                        empleado, confianza = self.recognizer.reconocer_empleado(embedding)
+                        if empleado is not None:
+                            self.empleado_actual = empleado
+                            self.actualizar_estado(f"Empleado {self.empleado_actual} reconocido, registrando")
+                        else:
+                            self.actualizar_estado("Rostro detectado (no reconocido)")
+                    else:
+                        self.actualizar_estado("Rostro detectado (no válido)")
+            elif self.empleado_actual != None:
+                # Ya hay empleado reconocido, mantenemos estado
+                self.actualizar_estado(f"Empleado {self.empleado_actual} reconocido, registrando")
+            else:
+                self.actualizar_estado("No se detecta ningun rostro")
+
+            # --- Mostrar frame en la UI ---
+            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            h, w, ch = frame_rgb.shape
+            bytes_per_line = ch * w
+            imagen_qt = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
+            self.etiqueta_camara.setPixmap(QPixmap.fromImage(imagen_qt).scaled(
+                640, 480, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+
 
     # ---------- Función para registrar empleado ----------
     def registrar_empleado(self):

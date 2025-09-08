@@ -31,12 +31,15 @@ class ReconocedorFacial:
             bool: True si se registró correctamente, False si no se detectó rostro
         """
         embedding, _ = self.extraer_embedding(frame)
-        if embedding is not None:
+        empleado = self.reconocer_empleado(embedding)
+        if embedding is not None and empleado is None:
             # Registrar en SQLite usando db_controlador
             db_controlador.registrar_embedding_local(id_empleado, embedding)
             # Actualizar la cache interna de empleados y embeddings
             self.actualizar_empleados()
+            print("Empleado registrado exitosamente")
             return True
+        print("Empleado ya existente o no reconocido")
         return False
 
     def extraer_embedding(self, frame):
@@ -80,9 +83,11 @@ class ReconocedorFacial:
             if similitud > mejor_similitud:
                 mejor_similitud = similitud
                 mejor_empleado = empleado
-        
+
         if mejor_similitud > 0.6:  # Umbral de confianza
-            return mejor_empleado, mejor_similitud
+            print(f"Mejor empleado: {mejor_empleado['id']}")
+            print(f"Mejor similitud: {mejor_similitud}")
+            return mejor_empleado['id'], mejor_similitud
         
         return None, 0.0
     
