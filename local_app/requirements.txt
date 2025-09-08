@@ -1,0 +1,16 @@
+cmake
+dlib-binary
+# Reconocimiento facial
+insightface==0.7.3
+onnxruntime==1.16.3  
+
+# Procesamiento de imágenes
+opencv-python==4.8.1.78
+numpy==1.24.3
+
+# Interfaz gráfica
+PyQt5==5.15.9
+PyQt5-sip==12.13.0
+
+# Utilidades
+requests==2.31.0
