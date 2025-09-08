@@ -19,6 +19,26 @@ class ReconocedorFacial:
         if self.empleados:
             self.embeddings = np.array([emp['embedding'] for emp in self.empleados])
     
+    def registrar_empleado_local(self, id_empleado, frame):
+        """
+        Extrae el embedding de un frame y lo guarda en la DB local.
+        
+        Args:
+            id_empleado (int): ID del empleado
+            frame (np.array): imagen en formato BGR (OpenCV)
+        
+        Returns:
+            bool: True si se registró correctamente, False si no se detectó rostro
+        """
+        embedding, _ = self.extraer_embedding(frame)
+        if embedding is not None:
+            # Registrar en SQLite usando db_controlador
+            db_controlador.registrar_embedding_local(id_empleado, embedding)
+            # Actualizar la cache interna de empleados y embeddings
+            self.actualizar_empleados()
+            return True
+        return False
+
     def extraer_embedding(self, frame):
         """Extrae el embedding facial de un frame usando InsightFace"""
         # InsightFace trabaja directamente con BGR (OpenCV format)

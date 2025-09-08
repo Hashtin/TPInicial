@@ -2,7 +2,7 @@ cmake
 dlib-binary
 # Reconocimiento facial
 insightface==0.7.3
-onnxruntime==1.16.3  
+onnxruntime
 
 # Procesamiento de imágenes
 opencv-python==4.8.1.78
