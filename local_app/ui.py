@@ -19,6 +19,7 @@ class InterfazReconocimiento(QMainWindow):
 
         self.empleado_actual = None         # Empleado actualmente reconocido
         self.accion_actual = None
+        self.nombre_empleado_actual = None
         # Inicializar UI
         self.inicializar_ui()
 
@@ -124,6 +125,7 @@ class InterfazReconocimiento(QMainWindow):
                 # No hay rostro en pantalla
                 self.empleado_actual = None
                 self.accion_actual = None
+                self.nombre_empleado_actual = None
             elif self.empleado_actual == None and len(faces) > 0:
                 if getattr(self, "empleado_actual", None) is None:
                     embedding, _ = self.recognizer.extraer_embedding(frame)
@@ -133,11 +135,13 @@ class InterfazReconocimiento(QMainWindow):
                             self.empleado_actual = empleado
                             self.actualizar_estado(f"Empleado: {self.empleado_actual} Estado: Reconocido, registrando")
                             resultado = api_cliente.registrar_ingreso(self.empleado_actual)
-                            self.accion_actual = resultado[0]
-                            if resultado != False:
-                                self.actualizar_estado(f"Empleado: {self.empleado_actual} Estado: {self.accion_actual}")
+                            es_validadado = resultado['success']
+                            if es_validadado:
+                                self.accion_actual = resultado['accion']
+                                self.nombre_empleado_actual = f"{resultado['nombre']} {resultado['apellido']}"
+                                self.actualizar_estado(f"Empleado: {self.nombre_empleado_actual} Estado: {self.accion_actual}")
                             else:
-                                self.actualizar_estado(f"Empleado: {self.empleado_actual} Estado: Rrror al registrar")
+                                self.actualizar_estado(f"Empleado: {self.empleado_actual} Estado: Error al registrar")
                         else:
                             self.actualizar_estado("Rostro detectado (no reconocido)")
                     else:
@@ -147,7 +151,7 @@ class InterfazReconocimiento(QMainWindow):
                 if self.accion_actual is None:
                     self.actualizar_estado(f"Empleado: {self.empleado_actual} Estado: Reconocido, registrando")
                 else:
-                    self.actualizar_estado(f"Empleado: {self.empleado_actual} Estado: {self.accion_actual}")
+                    self.actualizar_estado(f"Empleado: {self.nombre_empleado_actual} Estado: {self.accion_actual}")
             else:
                 self.actualizar_estado("No se detecta ningun rostro")
 

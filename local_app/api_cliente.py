@@ -49,7 +49,7 @@ def registrar_ingreso(id_empleado):
         # Verificar si la petición fue exitosa
         respuesta.raise_for_status()
         
-        return respuesta.json()['success']
+        return respuesta.json()
     
     except requests.exceptions.RequestException as e:
         print(f"Error al enviar embedding al backend: {e}")
