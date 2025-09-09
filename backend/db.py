@@ -1,6 +1,9 @@
 import os
 import psycopg2
+from dotenv import load_dotenv
 from datetime import datetime
+
+load_dotenv()
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
@@ -9,12 +12,13 @@ def get_connection():
     if DATABASE_URL is not None:
         return psycopg2.connect(DATABASE_URL)
 
+
 def ultima_accion_empleado(id):
     conn = get_connection()
     control = conn.cursor()
 
     control.execute(
-        "SELECT accion FROM registros WHERE empleado_id=? ORDER BY id DESC LIMIT 1",
+        "SELECT accion FROM registros WHERE empleado_id= %s ORDER BY id DESC LIMIT 1",
         (id,)
     )
     last = control.fetchone()
@@ -23,6 +27,7 @@ def ultima_accion_empleado(id):
     return last
 
 def ingreso_empleado(id):
+
     ultima = ultima_accion_empleado(id)
 
     if ultima is not None and ultima[0] == "Ingreso":
@@ -35,7 +40,7 @@ def ingreso_empleado(id):
         accion = "Ingreso"
 
         control.execute(
-            "INSERT INTO registros (empleado_id, accion, date) VALUES (?,?,?)",
+            "INSERT INTO registros (empleado_id, accion, date) VALUES (%s, %s, %s)",
             (id, accion, timestamp)
         )
         conn.commit()
@@ -57,7 +62,7 @@ def egreso_empleado(id):
     accion = "Egreso"
 
     control.execute(
-        "INSERT INTO registros (empleado_id, accion, date) VALUES (?,?,?)",
+        "INSERT INTO registros (empleado_id, accion, date) VALUES (%s, %s, %s)",
         (id, accion, timestamp)
     )
     conn.commit()
@@ -70,7 +75,7 @@ def get_empleado(id):
     conn = get_connection()
     control = conn.cursor()
 
-    control.execute("Select nombre, apellido from empleados where id=?",(id,))
+    control.execute("Select nombre, apellido from empleados where id= %s",(id,))
 
     empleado = control.fetchone()
     conn.close()
