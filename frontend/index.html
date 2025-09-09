@@ -1,19 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Ingreso Empleados</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/config.js"></script>
 </head>
 <body>
 
     <!-- Logo empresarial -->
-    <img src="{{ url_for('static', filename='Logo.jpg') }}" alt="Logo Empresa" class="logo-header">
+    <img src="static/Logo.jpg" alt="Logo Empresa" class="logo-header">
 
     <h2>Bienvenido a nuestra PYME</h2>
 
-     <!-- Botón de Registro-->
-    <form action="{{ url_for('registros') }}" method="get">
-        <button type="submit">Ver Registros</button>
-    </form>
+    <!-- Botón de Registros -->
+    <button id="verRegistrosBtn">Ver Registros</button>
+
+    <script>
+        document.getElementById("verRegistrosBtn").addEventListener("click", async () => {
+            // Redirige a registros.html
+            window.location.href = "registros.html";
+        });
+    </script>
+
 </body>
 </html>

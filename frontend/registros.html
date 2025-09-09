@@ -2,35 +2,30 @@
 <html>
 <head>
     <title>Registros</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='registros.css') }}">
+    <link rel="stylesheet" href="css/registros.css">
+    <script defer src="js/config.js"></script>
+    <script defer src="js/registros.js"></script>
 </head>
 <body>
     <h2>Lista de registros</h2>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Acción</th>
-            <th>Fecha</th>
-        </tr>
-        {% for r in registros %}
-        <tr>
-            <td>{{ r[0] }}</td>
-            <td>{{ r[1] }}</td>
-            <td>{{ r[2] }}</td>
-            <td>{{ r[3] }}</td>
-            <td>{{ r[4] }}</td>
-        </tr>
-        {% endfor %}
+    <table border="1" id="tabla-registros">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Acción</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los registros se insertan con JS -->
+        </tbody>
     </table>
-</body>
-</html>
 
     <br><br>
-    <a href="{{ url_for('index') }}">
+    <a href="index.html">
         <button class="back-button">ATRÁS</button>
     </a>
-
 </body>
 </html>
