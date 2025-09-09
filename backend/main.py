@@ -29,21 +29,15 @@ def registrar_ingreso():
     return jsonify({'success': resultado})
 
 @app.route('/api//registrar-embedding', methods=['POST'])
-def registrar_ingreso():
+def registrar_embedding():
     data = request.get_json()
     empleado_id = data['empleado_id']
     embedding = data['embedding']
 
     resultado = db.registrar_embedding(empleado_id, embedding)
-    
+
     return jsonify({'success': resultado})
 
-@app.route('/api/registrar-egreso', methods=['POST'])  
-def registrar_egreso():
-    data = request.get_json()
-    empleado_id = data['empleado_id']
-    resultado = db.egreso_empleado(empleado_id)
-    return jsonify({'success': resultado})
 
 # ====================== RUN ======================
 if __name__ == "__main__":
