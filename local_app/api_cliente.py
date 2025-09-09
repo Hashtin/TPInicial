@@ -32,6 +32,29 @@ def registrar_embedding_back(id_empleado, embedding):
         print(f"Error al enviar embedding al backend: {e}")
         return False
 
+def registrar_ingreso(id_empleado):
+    try:
+        # Preparar los datos para enviar
+        datos = {
+            'empleado_id': id_empleado,
+        }
+        
+        # Hacer la petición POST al backend
+        respuesta = requests.post(
+            f"{backend_url}/registrar-ingreso",
+            json=datos,
+            timeout=10
+        )
+        
+        # Verificar si la petición fue exitosa
+        respuesta.raise_for_status()
+        
+        return respuesta.json()['success']
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Error al enviar embedding al backend: {e}")
+        return False
+
 def get_empleados():
     try:
         respuesta = requests.get(f"{backend_url}/empleados-embedding", timeout=10)

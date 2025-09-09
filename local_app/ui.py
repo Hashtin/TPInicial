@@ -132,6 +132,11 @@ class InterfazReconocimiento(QMainWindow):
                         if empleado is not None:
                             self.empleado_actual = empleado
                             self.actualizar_estado(f"Empleado {self.empleado_actual} reconocido, registrando")
+                            resultado = api_cliente.registrar_ingreso(self.empleado_actual)
+                            if resultado != False:
+                                self.actualizar_estado(f"Empleado {self.empleado_actual} {resultado}")
+                            else:
+                                self.actualizar_estado(f"Empleado {self.empleado_actual} error al registrar")
                         else:
                             self.actualizar_estado("Rostro detectado (no reconocido)")
                     else:
