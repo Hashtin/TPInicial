@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import db
-
+import os 
 app = Flask(__name__)
 
 CORS(app)
@@ -32,4 +32,4 @@ def registrar_egreso():
 
 # ====================== RUN ======================
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0", port=os.getenv("PORT", 5000))
