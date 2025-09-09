@@ -1,5 +1,4 @@
 import sqlite3
-
 import numpy as np
 
 DB_ROUTE = "local_app/database/database.db"
@@ -8,14 +7,36 @@ def init_db():
     conn = get_connection()
     c = conn.cursor()
 
+    c.execute("DROP TABLE IF EXISTS empleados_embeddings ")
     c.execute("CREATE TABLE IF NOT EXISTS empleados_embeddings (id_empleado INTEGER PRIMARY KEY, embedding BLOB)")
 
     conn.commit()
     conn.close()
 
 def actualizar_empleados(empleados):
-    #se conecta a la base de datos y actualiza los empleados con los recibidos del back
-    return
+    if not empleados:
+        print("Lista de empleados vacía, no se actualiza la base de datos")
+        return
+
+    conn = get_connection()
+    c = conn.cursor()
+    
+    for emp in empleados:
+        # Convertir lista de vuelta a bytes para SQLite
+        if emp['embedding']:
+            embedding_array = np.array(emp['embedding'], dtype=np.float32)
+            embedding_bytes = embedding_array.tobytes()
+        else:
+            embedding_bytes = None
+        
+        # Insertar o actualizar en DB local
+        c.execute("""
+            INSERT OR REPLACE INTO empleados_embeddings (id, embedding)
+            VALUES (?, ?)
+        """, (emp['id'], embedding_bytes))
+    
+    conn.commit()
+    conn.close()
 
 def obtener_todos_empleados():
     conn = get_connection()

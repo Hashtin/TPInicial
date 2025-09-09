@@ -16,11 +16,26 @@ def api_registros():
     datos = db.obtener_registros_empleados()
     return jsonify(datos)
 
+@app.route("/api/empleados-embedding")
+def api_registros():
+    datos = db.obtener_todos_empleados_embeddings()
+    return jsonify(datos)
+
 @app.route('/api/registrar-ingreso', methods=['POST'])
 def registrar_ingreso():
     data = request.get_json()
     empleado_id = data['empleado_id']
     resultado = db.ingreso_empleado(empleado_id)
+    return jsonify({'success': resultado})
+
+@app.route('/api//registrar-embedding', methods=['POST'])
+def registrar_ingreso():
+    data = request.get_json()
+    empleado_id = data['empleado_id']
+    embedding = data['embedding']
+
+    resultado = db.registrar_embedding(empleado_id, embedding)
+    
     return jsonify({'success': resultado})
 
 @app.route('/api/registrar-egreso', methods=['POST'])  

@@ -40,7 +40,7 @@ class InterfazReconocimiento(QMainWindow):
         layout_botones.addWidget(self.boton_detener)
 
         # Nuevo botón: registrar empleado
-        self.boton_registrar = QPushButton("Registrar nuevo empleado")
+        self.boton_registrar = QPushButton("Registrar nueva imagen")
         self.boton_registrar.clicked.connect(self.registrar_empleado)
         layout_botones.addWidget(self.boton_registrar)
 

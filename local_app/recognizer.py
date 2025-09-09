@@ -1,6 +1,7 @@
 import numpy as np
 import db_controlador
 from insightface.app import FaceAnalysis
+import api_cliente
 
 class ReconocedorFacial:
     def __init__(self):
@@ -33,11 +34,12 @@ class ReconocedorFacial:
         empleado = self.reconocer_empleado(embedding)
         if embedding is not None and empleado is None:
             # Registrar en SQLite usando db_controlador
-            db_controlador.registrar_embedding_local(id_empleado, embedding)
-            # Actualizar la cache interna de empleados y embeddings
-            self.actualizar_empleados()
-            print("Empleado registrado exitosamente")
-            return True
+            if api_cliente.registrar_embedding_back(id_empleado, embedding):
+                db_controlador.registrar_embedding_local(id_empleado, embedding)
+                # Actualizar la cache interna de empleados y embeddings
+                self.actualizar_empleados()
+                print("Empleado registrado exitosamente")
+                return True
         print("Empleado ya existente o no reconocido")
         return False
 

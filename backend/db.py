@@ -2,6 +2,7 @@ import os
 import psycopg2
 from dotenv import load_dotenv
 from datetime import datetime
+import numpy as np
 
 load_dotenv()
 
@@ -12,13 +13,12 @@ def get_connection():
     if DATABASE_URL is not None:
         return psycopg2.connect(DATABASE_URL)
 
-
 def ultima_accion_empleado(id):
     conn = get_connection()
     control = conn.cursor()
 
     control.execute(
-        "SELECT accion FROM registros WHERE empleado_id= %s ORDER BY id DESC LIMIT 1",
+        "SELECT accion FROM registros WHERE empleado_id= %s",
         (id,)
     )
     last = control.fetchone()
@@ -29,46 +29,57 @@ def ultima_accion_empleado(id):
 def ingreso_empleado(id):
 
     ultima = ultima_accion_empleado(id)
+    accion = None
 
     if ultima is not None and ultima[0] == "Ingreso":
-        return False
-    else:
-        conn = get_connection()
-        control = conn.cursor()
-
-        timestamp = datetime.now()
+        accion = "Egreso"
+    if ultima is not None and ultima[0] == "Egreso":
+        accion = "Ingreso"
+    if ultima is None:
         accion = "Ingreso"
 
+    if accion is not None:
+        conn = get_connection()
+        control = conn.cursor()
+    
         control.execute(
-            "INSERT INTO registros (empleado_id, accion, date) VALUES (%s, %s, %s)",
-            (id, accion, timestamp)
+            "INSERT INTO registros (empleado_id, accion) VALUES (%s, %s)",
+            (id, accion)
         )
         conn.commit()
 
         conn.close()
         return True
+    return False
 
-def egreso_empleado(id):
-
-    ultima = ultima_accion_empleado(id)
-
-    if ultima is not None and ultima[0] == "Egreso":
-        return False
-    
+def registrar_embedding(id_empleado, embedding_lista):
+    """
+    Reemplaza el embedding actual de un empleado
+    Recibe: embedding_lista (lista de Python desde la API)
+    """
     conn = get_connection()
     control = conn.cursor()
-
-    timestamp = datetime.now()
-    accion = "Egreso"
-
-    control.execute(
-        "INSERT INTO registros (empleado_id, accion, date) VALUES (%s, %s, %s)",
-        (id, accion, timestamp)
-    )
-    conn.commit()
-
-    conn.close()
-    return True
+    
+    try:
+        # Convertir la lista a array numpy y luego a bytes
+        embedding_array = np.array(embedding_lista, dtype=np.float32)
+        embedding_bytes = embedding_array.tobytes()
+        
+        # UPDATE para reemplazar el embedding existente
+        control.execute(
+            "UPDATE empleados SET embedding = %s WHERE id = %s",
+            (embedding_bytes, id_empleado)  # ← Guardar los bytes
+        )
+        
+        conn.commit()
+        return True
+        
+    except Exception as e:
+        print(f"Error al actualizar embedding: {e}")
+        return False
+        
+    finally:
+        conn.close()
 
 def get_empleado(id):
 
@@ -80,6 +91,30 @@ def get_empleado(id):
     empleado = control.fetchone()
     conn.close()
     return empleado
+
+def obtener_todos_empleados_embeddings():
+    conn = get_connection()
+    c = conn.cursor()
+    
+    c.execute("SELECT id, embedding FROM empleados WHERE embedding IS NOT NULL")
+    empleados = []
+    
+    for fila in c.fetchall():
+        id_emp, embedding_bytes = fila
+        # Convertir bytes a lista para JSON
+        if embedding_bytes:
+            embedding_array = np.frombuffer(embedding_bytes, dtype=np.float32)
+            embedding_lista = embedding_array.tolist()
+        else:
+            embedding_lista = None
+        
+        empleados.append({
+            'id': id_emp,
+            'embedding': embedding_lista
+        })
+    
+    conn.close()
+    return empleados
 
 def obtener_registros():
     # Conectar a la base de datos db
