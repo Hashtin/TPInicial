@@ -36,7 +36,7 @@ def get_empleados():
     try:
         respuesta = requests.get(f"{backend_url}/empleados-embedding", timeout=10)
         respuesta.raise_for_status()
-        return respuesta.json()  # Devuelve lista de empleados con embeddings
+        return respuesta.json()  
     except requests.exceptions.RequestException as e:
         print(f"Error al obtener empleados: {e}")
         return []

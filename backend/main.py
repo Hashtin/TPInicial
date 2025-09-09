@@ -17,7 +17,7 @@ def api_registros():
     return jsonify(datos)
 
 @app.route("/api/empleados-embedding")
-def api_registros():
+def obtener_empleados_embeddings():
     datos = db.obtener_todos_empleados_embeddings()
     return jsonify(datos)
 

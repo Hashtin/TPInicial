@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                              QHBoxLayout, QPushButton, QLabel, QInputDialog)
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QImage, QPixmap
+import api_cliente
 
 class InterfazReconocimiento(QMainWindow):
     def __init__(self, recognizer):
@@ -159,7 +160,7 @@ class InterfazReconocimiento(QMainWindow):
                 if ok:
                     success = self.recognizer.registrar_empleado_local(id_empleado, frame)
                     if success:
-                        self.actualizar_estado(f"Empleado {id_empleado} registrado localmente")
+                        self.actualizar_estado(f"Empleado {id_empleado} actualizado exitosamente")
                     else:
                         self.actualizar_estado("No se detectó rostro, intente de nuevo")
         else:
