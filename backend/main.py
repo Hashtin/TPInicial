@@ -1,23 +1,33 @@
-from flask import Flask, render_template, request, redirect, url_for, Response
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 import db
 
-app = Flask(__name__,
-    template_folder="../frontend/templates",
-    static_folder="../frontend/static")
+app = Flask(__name__)
+CORS(app)  # Permite requests desde frontend en Vercel
 
-# ====================== RUTAS ======================
-@app.route('/')
-def index():
-    return render_template('index.html')
+# ====================== RUTAS API ======================
+@app.route('/api/')
+def api_index():
+    return jsonify({"message": "API funcionando correctamente"})
 
-@app.route("/registros")
-def registros():
+@app.route("/api/registros")
+def api_registros():
     datos = db.obtener_registros_empleados()
-    return render_template("registros.html", registros=datos)
+    return jsonify(datos)
 
-@app.route('/volver', methods=['POST'])
-def volver():
-    return redirect(url_for('index'))  # redirige de vuelta a inicio, por ejemplo
+@app.route('/api/registrar-ingreso', methods=['POST'])
+def registrar_ingreso():
+    data = request.get_json()
+    empleado_id = data['empleado_id']
+    resultado = db.ingreso_empleado(empleado_id)
+    return jsonify({'success': resultado})
+
+@app.route('/api/registrar-egreso', methods=['POST'])  
+def registrar_egreso():
+    data = request.get_json()
+    empleado_id = data['empleado_id']
+    resultado = db.egreso_empleado(empleado_id)
+    return jsonify({'success': resultado})
 
 # ====================== RUN ======================
 if __name__ == "__main__":
