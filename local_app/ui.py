@@ -137,7 +137,7 @@ class InterfazReconocimiento(QMainWindow):
                             resultado = api_cliente.registrar_ingreso(self.empleado_actual)
                             es_validadado = resultado['success']
                             if es_validadado:
-                                self.accion_actual = resultado['accion']
+                                self.accion_actual = resultado['accion'][0]
                                 self.nombre_empleado_actual = f"{resultado['nombre']} {resultado['apellido']}"
                                 self.actualizar_estado(f"Empleado: {self.nombre_empleado_actual} Estado: {self.accion_actual}")
                             else:
@@ -185,7 +185,7 @@ class InterfazReconocimiento(QMainWindow):
 
     # ---------- Actualizar estado ----------
     def actualizar_estado(self, mensaje):
-        self.etiqueta_estado.setText(f"Estado: {mensaje}")
+        self.etiqueta_estado.setText(f"{mensaje}")
 
     # ---------- Cerrar ventana ----------
     def closeEvent(self, event):
