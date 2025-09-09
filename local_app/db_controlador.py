@@ -20,7 +20,7 @@ def actualizar_empleados(empleados):
 
     conn = get_connection()
     c = conn.cursor()
-    
+
     for emp in empleados:
         # Convertir lista de vuelta a bytes para SQLite
         if emp['embedding']:
@@ -28,10 +28,10 @@ def actualizar_empleados(empleados):
             embedding_bytes = embedding_array.tobytes()
         else:
             embedding_bytes = None
-        
+
         # Insertar o actualizar en DB local
         c.execute("""
-            INSERT OR REPLACE INTO empleados_embeddings (id, embedding)
+            INSERT OR REPLACE INTO empleados_embeddings (id_empleado, embedding)
             VALUES (?, ?)
         """, (emp['id'], embedding_bytes))
     

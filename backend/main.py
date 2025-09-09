@@ -26,9 +26,13 @@ def registrar_ingreso():
     data = request.get_json()
     empleado_id = data['empleado_id']
     resultado = db.ingreso_empleado(empleado_id)
+    accion = None
+    empleado = None
+    
     if resultado:
-        resultado = db.ultima_accion_empleado(empleado_id)
-    return jsonify({'success': resultado})
+        accion = db.ultima_accion_empleado(empleado_id)
+        empleado = db.get_empleado(empleado_id)
+    return jsonify({'success': resultado , 'empleado': empleado, 'accion': accion})
 
 @app.route('/api//registrar-embedding', methods=['POST'])
 def registrar_embedding():

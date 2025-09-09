@@ -18,7 +18,7 @@ def ultima_accion_empleado(id):
     control = conn.cursor()
 
     control.execute(
-        "SELECT accion FROM registros WHERE empleado_id= %s",
+        "SELECT accion FROM registros WHERE empleado_id= %s order by date desc limit 1",
         (id,)
     )
     last = control.fetchone()

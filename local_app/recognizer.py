@@ -32,9 +32,12 @@ class ReconocedorFacial:
         """
         embedding, _ = self.extraer_embedding(frame)
         empleado = self.reconocer_empleado(embedding)
-        if embedding is not None and empleado is None:
+        print(f"Empleado reconocido?: {empleado}")
+        if embedding is not None and empleado[0] is None:
             # Registrar en SQLite usando db_controlador
-            if api_cliente.registrar_embedding_back(id_empleado, embedding):
+            resultado = api_cliente.registrar_embedding_back(id_empleado, embedding)
+            print(f"resultado back: {resultado}")
+            if resultado:
                 db_controlador.registrar_embedding_local(id_empleado, embedding)
                 # Actualizar la cache interna de empleados y embeddings
                 self.actualizar_empleados()
@@ -86,8 +89,6 @@ class ReconocedorFacial:
                 mejor_empleado = empleado
 
         if mejor_similitud > 0.6:  # Umbral de confianza
-            print(f"Mejor empleado: {mejor_empleado['id']}")
-            print(f"Mejor similitud: {mejor_similitud}")
             return mejor_empleado['id'], mejor_similitud
         
         return None, 0.0
