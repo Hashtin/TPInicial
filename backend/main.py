@@ -3,7 +3,8 @@ from flask_cors import CORS
 import db
 
 app = Flask(__name__)
-CORS(app)  # Permite requests desde frontend en Vercel
+
+CORS(app)
 
 # ====================== RUTAS API ======================
 @app.route('/api/')
