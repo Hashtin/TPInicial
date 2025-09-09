@@ -85,7 +85,6 @@ class InterfazReconocimiento(QMainWindow):
         self.boton_iniciar.setEnabled(False)
         self.boton_detener.setEnabled(True)
 
-
     def detener_reconocimiento(self):
         if self.captura:
             self.temporizador.stop()
@@ -97,7 +96,6 @@ class InterfazReconocimiento(QMainWindow):
 
         self.boton_iniciar.setEnabled(True)
         self.boton_detener.setEnabled(False)
-
 
     def inicializar_camara(self):
         self.captura = cv2.VideoCapture(0)
@@ -150,7 +148,6 @@ class InterfazReconocimiento(QMainWindow):
             imagen_qt = QImage(frame_rgb.data, w, h, bytes_per_line, QImage.Format_RGB888)
             self.etiqueta_camara.setPixmap(QPixmap.fromImage(imagen_qt).scaled(
                 640, 480, Qt.KeepAspectRatio, Qt.SmoothTransformation))
-
 
     # ---------- Función para registrar empleado ----------
     def registrar_empleado(self):

@@ -1,48 +1,13 @@
+import os
+import psycopg2
 from datetime import datetime
-import sqlite3
 
-DB_ROUTE = "database/database.db"
-
-def init_db():
-    conn = get_connection()
-    c = conn.cursor()
-
-    # Creamos la tabla empleados, donde asignamos nombres y apellidos y un id para diferenciar.
-    c.execute('''CREATE TABLE IF NOT EXISTS empleados
-                 (id INTEGER PRIMARY KEY, nombre TEXT, apellido TEXT)''')
-    
-    # Creamos tabla registros, donde guardaremos ingresos e egresos con timestamp.
-    c.execute("CREATE TABLE IF NOT EXISTS registros (id INTEGER PRIMARY KEY,empleado_id INTEGER,accion TEXT,date TIMESTAMP, FOREIGN KEY (empleado_id) REFERENCES empleados(id));")
-    
-    # Empleados = equipo de trabajo de prueba
-    empleados = [
-        (0, 'Luis', 'Alcarraz'),
-        (1, 'Augusto', 'Fuertes'),
-        (2, 'Martin', 'Ojeda'),
-        (3, 'Francisco', 'San Martin')
-    ]
-    
-    # Insertamos los datos
-    for emp in empleados:
-        c.execute("INSERT OR IGNORE INTO empleados (id, nombre, apellido) VALUES (?,?,?)", emp)
-    
-    # Registrar ingreso actual para cada uno
-    from datetime import datetime
-    timestamp = datetime.now()
-
-    for emp in empleados:
-        emp_id = emp[0]
-    # Comprobar si ya tiene un registro (para no duplicar al reiniciar)
-        c.execute("SELECT * FROM registros WHERE empleado_id=? AND accion='Ingreso'", (emp_id,))
-        if not c.fetchone():
-            timestamp = datetime.now()
-            c.execute("INSERT INTO registros (empleado_id, accion, date) VALUES (?,?,?)",
-                  (emp_id, "Ingreso", timestamp))
-    conn.commit()
-    conn.close()
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 def get_connection():
-    return sqlite3.connect(DB_ROUTE)
+    # Usar PostgreSQL en producción (Railway)
+    if DATABASE_URL is not None:
+        return psycopg2.connect(DATABASE_URL)
 
 def ultima_accion_empleado(id):
     conn = get_connection()

@@ -1,4 +1,3 @@
-import cv2
 import numpy as np
 import db_controlador
 from insightface.app import FaceAnalysis
