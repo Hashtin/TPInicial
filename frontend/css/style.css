@@ -9,6 +9,7 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 20px;
+    text-align: centerS;
 }
 
 /* ===== LOGO - HEADER VINTAGE ===== */
@@ -32,7 +33,7 @@ h2 {
     color: #3b6b3b; /* verde oscuro */
     text-shadow: 2px 2px 0 #cce5cc, 4px 4px 0 #b3d9b3; /* efecto vintage */
     text-align: center; /* centrado horizontalmente */
-    margin-top: 20px; /* lo sube hacia arriba */
+    margin-top: -200px; /* lo sube hacia arriba */
     margin-bottom: 50px; /* mantiene espacio debajo */
 }
 
@@ -55,6 +56,8 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 4px 4px 0 #b3d9b3; /* sombra tipo vintage */
+    margin-bottom: 15px;
+    display: block;
 }
 
 button:hover {

@@ -10,50 +10,51 @@
 </head>
 <body>
 
-    <div class="dashboard-container">
-        <h1>📊 Dashboard de Análisis Productivo</h1>
-        
-        <div class="dashboard-grid">
-            <!-- Gráfico de Efectividad por Producto en el Tiempo -->
-            <div class="chart-card">
-                <h3>Efectividad por Producto (Evolución Mensual)</h3>
-                <canvas id="chart-efectividad-tiempo"></canvas>
-            </div>
+<div class="dashboard-container">
+    <h1>📊 Dashboard de Análisis Productivo</h1>
 
-            <!-- Gráfico de Eficiencia por Producto en el Tiempo -->
-            <div class="chart-card">
-                <h3>Eficiencia por Producto (Evolución Mensual)</h3>
-                <canvas id="chart-eficiencia-tiempo"></canvas>
-            </div>
-
-            <!-- Gráfico de Eficacia por Producto en el Tiempo -->
-            <div class="chart-card">
-                <h3>Eficacia por Producto (Evolución Mensual)</h3>
-                <canvas id="chart-eficacia-tiempo"></canvas>
-            </div>
-
-            <!-- Gráfico de Producción por Producto en el Tiempo -->
-            <div class="chart-card">
-                <h3>Producción Mensual por Producto (kg)</h3>
-                <canvas id="chart-produccion-tiempo"></canvas>
-            </div>
-
-            <!-- Gráfico de Torta - Ganancia Bruta por Producto -->
-            <div class="chart-card">
-                <h3>Distribución de Ganancia Bruta por Producto</h3>
-                <canvas id="chart-ganancia-producto"></canvas>
-            </div>
-
-            <!-- Métricas Resumen -->
-            <div class="metrics-card">
-                <h3>Métricas Clave</h3>
-                <div id="metricas-resumen"></div>
-            </div>
+    <!-- Slider de gráficos -->
+    <div class="chart-slider">
+        <div class="chart-slide active">
+            <h3>Efectividad por Producto (Evolución Mensual)</h3>
+            <canvas id="chart-efectividad-tiempo"></canvas>
         </div>
 
-        <button onclick="window.location.href='index.html'">← Volver al Inicio</button>
+        <div class="chart-slide">
+            <h3>Eficiencia por Producto (Evolución Mensual)</h3>
+            <canvas id="chart-eficiencia-tiempo"></canvas>
+        </div>
+
+        <div class="chart-slide">
+            <h3>Eficacia por Producto (Evolución Mensual)</h3>
+            <canvas id="chart-eficacia-tiempo"></canvas>
+        </div>
+
+        <div class="chart-slide">
+            <h3>Producción Mensual por Producto (kg)</h3>
+            <canvas id="chart-produccion-tiempo"></canvas>
+        </div>
+
+        <div class="chart-slide">
+            <h3>Distribución de Ganancia Bruta por Producto</h3>
+            <canvas id="chart-ganancia-producto"></canvas>
+        </div>
     </div>
 
-    <script src="js/dashboard.js"></script>
+    <div class="slider-buttons">
+        <button id="prev-slide">← Anterior</button>
+        <button id="next-slide">Siguiente →</button>
+    </div>
+
+    <div class="metrics-card">
+        <h3>Métricas Clave</h3>
+        <div id="metricas-resumen"></div>
+    </div>
+
+    <button class="btn_volver" onclick="window.location.href='index.html'">← Volver al Inicio</button>
+</div>
+
+<script src="js/dashboard.js"></script>
+<script src="js/slider.js"></script>
 </body>
 </html>

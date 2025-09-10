@@ -22,10 +22,8 @@ class DashboardProductivo {
         this.actualizarMetricas();
     }
 
-    // 1. Gráfico de Líneas - Efectividad en el Tiempo
     crearGraficoEfectividadTiempo() {
         const ctx = document.getElementById('chart-efectividad-tiempo').getContext('2d');
-        
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -42,26 +40,14 @@ class DashboardProductivo {
             },
             options: {
                 responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Evolución de Efectividad Mensual (%)'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Efectividad (%)' }
-                    }
-                }
+                plugins: { title: { display: true, text: 'Evolución de Efectividad Mensual (%)' } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Efectividad (%)' } } }
             }
         });
     }
 
-    // 2. Gráfico de Líneas - Eficiencia en el Tiempo
     crearGraficoEficienciaTiempo() {
         const ctx = document.getElementById('chart-eficiencia-tiempo').getContext('2d');
-        
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -78,26 +64,14 @@ class DashboardProductivo {
             },
             options: {
                 responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Evolución de Eficiencia Mensual (%)'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Eficiencia (%)' }
-                    }
-                }
+                plugins: { title: { display: true, text: 'Evolución de Eficiencia Mensual (%)' } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Eficiencia (%)' } } }
             }
         });
     }
 
-    // 3. Gráfico de Líneas - Eficacia en el Tiempo
     crearGraficoEficaciaTiempo() {
         const ctx = document.getElementById('chart-eficacia-tiempo').getContext('2d');
-        
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -114,26 +88,14 @@ class DashboardProductivo {
             },
             options: {
                 responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Evolución de Eficacia Mensual (%)'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Eficacia (%)' }
-                    }
-                }
+                plugins: { title: { display: true, text: 'Evolución de Eficacia Mensual (%)' } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Eficacia (%)' } } }
             }
         });
     }
 
-    // 4. Gráfico de Líneas - Producción en el Tiempo
     crearGraficoProduccionTiempo() {
         const ctx = document.getElementById('chart-produccion-tiempo').getContext('2d');
-        
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -150,26 +112,14 @@ class DashboardProductivo {
             },
             options: {
                 responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Evolución de Producción Mensual (kg)'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: { display: true, text: 'Producción (kg)' }
-                    }
-                }
+                plugins: { title: { display: true, text: 'Evolución de Producción Mensual (kg)' } },
+                scales: { y: { beginAtZero: true, title: { display: true, text: 'Producción (kg)' } } }
             }
         });
     }
 
-    // 5. Gráfico de Torta - Ganancia Bruta por Producto
     crearGraficoGananciaProducto() {
         const ctx = document.getElementById('chart-ganancia-producto').getContext('2d');
-        
         new Chart(ctx, {
             type: 'pie',
             data: {
@@ -184,10 +134,7 @@ class DashboardProductivo {
             options: {
                 responsive: true,
                 plugins: {
-                    title: {
-                        display: true,
-                        text: 'Distribución de Ganancia Bruta'
-                    },
+                    title: { display: true, text: 'Distribución de Ganancia Bruta' },
                     tooltip: {
                         callbacks: {
                             label: function(context) {
@@ -215,17 +162,18 @@ class DashboardProductivo {
 
     obtenerColor(id, alpha = 1) {
         const colores = [
-            `rgba(255, 99, 132, ${alpha})`,  // Rojo - Dulce de leche
-            `rgba(54, 162, 235, ${alpha})`,   // Azul - Sachet de leche
-            `rgba(255, 206, 86, ${alpha})`,   // Amarillo - Queso cremoso
-            `rgba(75, 192, 192, ${alpha})`    // Verde - Yogur bebible
+            `rgba(255, 99, 132, ${alpha})`,
+            `rgba(54, 162, 235, ${alpha})`,
+            `rgba(255, 206, 86, ${alpha})`,
+            `rgba(75, 192, 192, ${alpha})`
         ];
         return colores[id % colores.length];
     }
 }
 
-// Inicializar dashboard
 document.addEventListener('DOMContentLoaded', () => {
     const dashboard = new DashboardProductivo();
     dashboard.cargarDatos();
 });
+
+
