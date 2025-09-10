@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtGui import QImage, QPixmap
 import api_cliente
+import db_controlador
 
 class InterfazReconocimiento(QMainWindow):
     def __init__(self, recognizer):
@@ -87,9 +88,9 @@ class InterfazReconocimiento(QMainWindow):
 
     # Métodos para manejar el cooldown:
     def iniciar_cooldown(self):
-        """Inicia el cooldown de 5 segundos"""
+        """Inicia el cooldown de 3 segundos"""
         self.cooldown_activo = True
-        self.timer_cooldown.start(5000)  # 5000 ms = 5 segundos
+        self.timer_cooldown.start(3000)  # 1000 ms = 1 segundos
 
     def finalizar_cooldown(self):
         """Finaliza el cooldown"""
@@ -201,7 +202,8 @@ class InterfazReconocimiento(QMainWindow):
 
     # ---------- Placeholder para actualizar DB del back ----------
     def actualizar_back(self):
-        self.actualizar_estado("Funcionalidad de actualización desde back no implementada")
+        empleados = api_cliente.get_empleados()
+        db_controlador.actualizar_empleados(empleados)
 
     # ---------- Actualizar estado ----------
     def actualizar_estado(self, mensaje):
