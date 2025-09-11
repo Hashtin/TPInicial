@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Análisis Productivo</title>
+    <title>Dashboard Productivo</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -13,37 +13,20 @@
 <div class="dashboard-container">
     <h1>📊 Dashboard de Análisis Productivo</h1>
 
-    <!-- Slider de gráficos -->
-    <div class="chart-slider">
-        <div class="chart-slide active">
-            <h3>Efectividad por Producto (Evolución Mensual)</h3>
-            <canvas id="chart-efectividad-tiempo"></canvas>
+    <div class="dashboard-main">
+        <!-- Gráfico grande -->
+        <div class="chart-large">
+            <canvas id="chart-principal"></canvas>
         </div>
 
-        <div class="chart-slide">
-            <h3>Eficiencia por Producto (Evolución Mensual)</h3>
-            <canvas id="chart-eficiencia-tiempo"></canvas>
+        <!-- Miniaturas -->
+        <div class="chart-thumbnails">
+            <canvas class="thumbnail" data-index="0"></canvas>
+            <canvas class="thumbnail" data-index="1"></canvas>
+            <canvas class="thumbnail" data-index="2"></canvas>
+            <canvas class="thumbnail" data-index="3"></canvas>
+            <canvas class="thumbnail" data-index="4"></canvas>
         </div>
-
-        <div class="chart-slide">
-            <h3>Eficacia por Producto (Evolución Mensual)</h3>
-            <canvas id="chart-eficacia-tiempo"></canvas>
-        </div>
-
-        <div class="chart-slide">
-            <h3>Producción Mensual por Producto (kg)</h3>
-            <canvas id="chart-produccion-tiempo"></canvas>
-        </div>
-
-        <div class="chart-slide">
-            <h3>Distribución de Ganancia Bruta por Producto</h3>
-            <canvas id="chart-ganancia-producto"></canvas>
-        </div>
-    </div>
-
-    <div class="slider-buttons">
-        <button id="prev-slide">← Anterior</button>
-        <button id="next-slide">Siguiente →</button>
     </div>
 
     <div class="metrics-card">
@@ -55,6 +38,6 @@
 </div>
 
 <script src="js/dashboard.js"></script>
-<script src="js/slider.js"></script>
+<script src="js/slider-thumbnails.js"></script>
 </body>
 </html>

@@ -1,56 +1,138 @@
-document.addEventListener('DOMContentLoaded', () => {
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.chart-slide');
-    const charts = {}; // para almacenar los objetos Chart ya creados
+document.addEventListener('DOMContentLoaded', async () => {
+    const dashboard = new DashboardProductivo();
+    await dashboard.cargarDatos();
 
-    if (slides.length === 0) return;
+    const principalCanvas = document.getElementById('chart-principal');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    let currentChart = null;
 
-    // Función para mostrar slide y renderizar gráfico si hace falta
-    function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.classList.toggle('active', i === index);
-        });
+    const tipos = ['efectividad', 'eficiencia', 'eficacia', 'produccion', 'ganancia'];
 
-        const canvasId = slides[index].querySelector('canvas').id;
-        if (!charts[canvasId]) {
-            renderChart(canvasId);
+    // Mostrar gráfico grande
+    function mostrarGraficoGrande(index) {
+        if (currentChart) currentChart.destroy();
+
+        switch(index) {
+            case 0: currentChart = dashboard.crearGraficoEfectividadTiempo(principalCanvas); break;
+            case 1: currentChart = dashboard.crearGraficoEficienciaTiempo(principalCanvas); break;
+            case 2: currentChart = dashboard.crearGraficoEficaciaTiempo(principalCanvas); break;
+            case 3: currentChart = dashboard.crearGraficoProduccionTiempo(principalCanvas); break;
+            case 4: currentChart = dashboard.crearGraficoGananciaProducto(principalCanvas); break;
+        }
+
+        thumbnails.forEach((t, i) => t.classList.toggle('active', i === index));
+    }
+
+    // Crear miniaturas limpias
+    function crearMiniatura(canvas, tipo) {
+        const opcionesMini = {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                title: { display: false },
+                tooltip: { enabled: false }
+            },
+            scales: {
+                x: { display: false },
+                y: { display: false }
+            }
+        };
+
+        const ctx = canvas.getContext('2d');
+
+        switch(tipo) {
+            case 'efectividad':
+                return new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dashboard.datos.meses,
+                        datasets: dashboard.datos.productos.map(p => ({
+                            label: p.nombre,
+                            data: p.efectividad_mensual,
+                            borderColor: dashboard.obtenerColor(p.id),
+                            backgroundColor: dashboard.obtenerColor(p.id, 0.1),
+                            tension: 0.4,
+                            fill: false,
+                            borderWidth: 2
+                        }))
+                    },
+                    options: opcionesMini
+                });
+            case 'eficiencia':
+                return new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dashboard.datos.meses,
+                        datasets: dashboard.datos.productos.map(p => ({
+                            label: p.nombre,
+                            data: p.eficiencia_mensual,
+                            borderColor: dashboard.obtenerColor(p.id),
+                            backgroundColor: dashboard.obtenerColor(p.id, 0.1),
+                            tension: 0.4,
+                            fill: false,
+                            borderWidth: 2
+                        }))
+                    },
+                    options: opcionesMini
+                });
+            case 'eficacia':
+                return new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dashboard.datos.meses,
+                        datasets: dashboard.datos.productos.map(p => ({
+                            label: p.nombre,
+                            data: p.eficacia_mensual,
+                            borderColor: dashboard.obtenerColor(p.id),
+                            backgroundColor: dashboard.obtenerColor(p.id, 0.1),
+                            tension: 0.4,
+                            fill: false,
+                            borderWidth: 2
+                        }))
+                    },
+                    options: opcionesMini
+                });
+            case 'produccion':
+                return new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: dashboard.datos.meses,
+                        datasets: dashboard.datos.productos.map(p => ({
+                            label: p.nombre,
+                            data: p.produccion_mensual,
+                            borderColor: dashboard.obtenerColor(p.id),
+                            backgroundColor: dashboard.obtenerColor(p.id, 0.1),
+                            tension: 0.4,
+                            fill: false,
+                            borderWidth: 2
+                        }))
+                    },
+                    options: opcionesMini
+                });
+            case 'ganancia':
+                return new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: dashboard.datos.productos.map(p => p.nombre),
+                        datasets: [{
+                            data: dashboard.datos.productos.map(p => p.ganancia_total),
+                            backgroundColor: dashboard.datos.productos.map(p => dashboard.obtenerColor(p.id, 0.7)),
+                            borderColor: dashboard.datos.productos.map(p => dashboard.obtenerColor(p.id)),
+                            borderWidth: 1
+                        }]
+                    },
+                    options: opcionesMini
+                });
         }
     }
 
-    // Función para crear el gráfico según el id del canvas
-    function renderChart(id) {
-        const dashboard = new DashboardProductivo();
-        dashboard.cargarDatos().then(() => {
-            switch(id) {
-                case 'chart-efectividad-tiempo':
-                    charts[id] = dashboard.crearGraficoEfectividadTiempo();
-                    break;
-                case 'chart-eficiencia-tiempo':
-                    charts[id] = dashboard.crearGraficoEficienciaTiempo();
-                    break;
-                case 'chart-eficacia-tiempo':
-                    charts[id] = dashboard.crearGraficoEficaciaTiempo();
-                    break;
-                case 'chart-produccion-tiempo':
-                    charts[id] = dashboard.crearGraficoProduccionTiempo();
-                    break;
-                case 'chart-ganancia-producto':
-                    charts[id] = dashboard.crearGraficoGananciaProducto();
-                    break;
-            }
-        });
-    }
-
-    document.getElementById('prev-slide').addEventListener('click', () => {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        showSlide(currentSlide);
+    // Inicializar miniaturas
+    thumbnails.forEach((canvas, index) => {
+        canvas.id = `thumb-${index}`;
+        crearMiniatura(canvas, tipos[index]);
+        canvas.addEventListener('click', () => mostrarGraficoGrande(index));
     });
 
-    document.getElementById('next-slide').addEventListener('click', () => {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    });
-
-    // Mostrar primer slide
-    showSlide(currentSlide);
+    // Mostrar primer gráfico grande
+    mostrarGraficoGrande(0);
 });
